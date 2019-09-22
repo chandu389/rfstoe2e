@@ -159,7 +159,7 @@ class rfstoe2e:
         self.create_deployment_networks(nf_ele)
         self.create_deployment_units(nf_ele)
 
-        # Create prettt network
+        # Create pretty network
         deployment_str = ET.tostring(self.root_deployment, 'utf-8')
         self.deployment_dom = parseString(deployment_str)
         self.output(self.deployment_dom, 'deployment.xml')
@@ -327,8 +327,8 @@ class rfstoe2e:
 
             # Add network
             network_ele = ET.SubElement(cp_ele, 'network')
-            network_ele.text = cp.find('./ns:network', self.namespaces).text
-
+            network_type = self.network_map[cp.find('.//ns:subnet-name', self.namespaces).text]
+            network_ele.text = network_type
 
     def build_tree(self, root , namespace):
         rmno_Ele = ET.Element(root)
@@ -342,7 +342,7 @@ class rfstoe2e:
         :param network_list:
         :return:
         """
-
+        self.network_map = {}
         for network in network_list:
             network_ele = ET.SubElement(root, 'network')
             name_ele = ET.SubElement(network_ele, 'name')
@@ -359,6 +359,8 @@ class rfstoe2e:
             subnet_ele  = ET.SubElement(network_ele, 'subnet')
             subnet_name_ele = ET.SubElement(subnet_ele, 'name')
             subnet_name_ele.text = network.find('./ns:subnet-name',self.namespaces).text
+
+            self.network_map[network.find('./ns:subnet-name', self.namespaces).text] = network.find('./ns:type', self.namespaces).text
 
             if network.find('./ns:cidr', self.namespaces) is not None:
                 cidr_ele = ET.SubElement(subnet_ele, 'cidr')
