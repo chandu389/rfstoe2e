@@ -95,7 +95,7 @@ class rfstoe2e:
         :return:
         """
         #Create networks file
-        self.root_network = self.build_tree('rmno', self.namespaces['ns'])
+        self.root_network = self.build_tree('rmno', self.namespaces['e2e'])
         network_list = self.read_elem(self.rfs_dom, ".//ns:rcs/ns:"+self.service_type+"/ns:network")
         self.create_networks(network_list, self.root_network)
 
@@ -333,7 +333,7 @@ class rfstoe2e:
     def build_tree(self, root , namespace):
         rmno_Ele = ET.Element(root)
         if namespace:
-            rmno_Ele.set("xmlns",namespace)
+            rmno_Ele.set("xmlns", namespace)
         return rmno_Ele
 
     def create_networks(self, network_list, root):
@@ -410,4 +410,3 @@ def setup_logger(log_level=logging.INFO):
 
 if __name__ == "__main__":
     rfstoe2e()
-
