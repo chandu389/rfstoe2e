@@ -62,6 +62,7 @@ class rfstoe2e:
         result = subprocess.run(['pyang', self.args.yangfile, '-f', 'yin', '-p', self.yang_module_path], stdout=subprocess.PIPE , stderr=subprocess.PIPE)
         self.yang_dom = ET.fromstring(result.stdout)
         self.add_params = {}
+        log.debug(self.provider + '-' + self.solution + '-' + self.service_type + '-extensions')
         self.recursive_read_additional_params(self.provider + '-' + self.solution + '-' + self.service_type + '-extensions')
 
     def recursive_read_additional_params(self, group_name):
@@ -256,10 +257,11 @@ class rfstoe2e:
         nf_type_ele = ET.SubElement(nf_ele, 'type')
         nf_type_ele.text = self.provider + "-" + self.solution + "-" + self.service_type
         nf_vnfd_ele = ET.SubElement(nf_ele, 'vnfd')
-        if 'vnfd' in globals():
-            nf_vnfd_ele.text = self.vnfd
-        else:
-            nf_vnfd_ele.text = self.provider + "_" + self.service_type.upper()
+        nf_vnfd_ele.text = self.rfs_dom.find('.//ns:vnfd', self.namespaces).text
+        # if 'vnfd' in globals():
+        #     nf_vnfd_ele.text = self.vnfd
+        # else:
+        #     nf_vnfd_ele.text = self.provider + "_" + self.service_type.upper()
 
         #Create descriptor networks
 
